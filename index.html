@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <script
+      src="https://kit.fontawesome.com/a4bb938dfa.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- <script src="./script.js"></script>
+    <script src="./copyScript.js"></script> -->
+    <script src="./btn.js"></script>
+    <title>Test</title>
+  </head>
+  <body>
+    <!-- Notification Copy-->
+    <div class="notification" id="notification">
+      <i class="fas fa-check-circle"></i>
+      <span>IP-адрес скопирован в буфер обмена!</span>
+    </div>
+
+    <!-- Notification Start-->
+     <div class="preNotification" id="notification-preStart">
+      <i class="fas fa-rotate"></i>
+      <span>Запуск сервера!</span>
+    </div>
+    <div class="notification" id="notification-start">
+      <i class="fas fa-check-circle"></i>
+      <span>Сервер запущен!</span>
+    </div>
+
+    <!-- Notification Stop-->
+    <div class="notification-stop" id="notification-stop">
+      <i class="fas fa-circle-xmark"></i>
+      <span>Сервер остановлен!</span>
+    </div>
+
+    <!-- Notification Fail-->
+    <div class="notification-fail" id="notification-fail">
+      <i class="fas fa-check-circle"></i>
+      <span>Что-то пошло не так!</span>
+    </div>
+
+    <section class="servers">
+      <div class="container">
+        <h2 class="section-title">СЕРВЕРА</h2>
+
+        <div class="server-cards">
+          <!-- Server Card 1 -->
+          <div class="server-card">
+            <div class="server-header">
+              <h3 id="heading"></h3>
+            </div>
+            <div class="server-info">
+              <p>Карта: <span>Mirage</span></p>
+              <p>Игроков: <span>12/16</span></p>
+              <div class="server-players">
+                <span>Онлайн:</span>
+                <span>12/16</span>
+              </div>
+              <div class="lower-item-grid">
+                <div class="connect-btn-grid">
+                  <button class="start-btn" onclick="">
+                    <i class="fa-regular fa-circle-play"></i>
+                  </button>
+                  <button class="stop-btn">
+                    <i class="fa-regular fa-circle-stop"></i>
+                  </button>
+                </div>
+                <div class="ip-addr">
+                  <span>linfed.ru:28011</span>
+                  <button class="copy-btn" data-ip="linfed.ru:28011">
+                    <i class="far fa-copy"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Server Card 2 -->
+          <div class="server-card">
+            <div class="server-header">
+              <h3 id="heading"><i class="fas fa-crosshairs"></i> Practice 2</h3>
+            </div>
+            <div class="server-info">
+              <p>Карта: <span>Aim Map</span></p>
+              <p>Игроков: <span>18/20</span></p>
+              <div class="server-players">
+                <span>Онлайн:</span>
+                <span>18/20</span>
+              </div>
+              <div class="lower-item-grid">
+                <div class="connect-btn-grid">
+                  <button class="start-btn">
+                    <i class="fa-regular fa-circle-play"></i>
+                  </button>
+                  <button class="stop-btn">
+                    <i class="fa-regular fa-circle-stop"></i>
+                  </button>
+                </div>
+                <div class="ip-addr">
+                  <span>linfed.ru:28012</span>
+                  <button class="copy-btn" data-ip="linfed.ru:28012">
+                    <i class="far fa-copy"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Server Card 3 -->
+          <div class="server-card">
+            <div class="server-header">
+              <h3 id="heading"><i class="fas fa-crosshairs"></i> Practice 3</h3>
+            </div>
+            <div class="server-info">
+              <p>Карта: <span>Dust2</span></p>
+              <p>Игроков: <span>10/10</span></p>
+              <div class="server-players">
+                <span>Онлайн:</span>
+                <span>10/10</span>
+              </div>
+              <div class="lower-item-grid">
+                <div class="connect-btn-grid">
+                  <button class="start-btn">
+                    <i class="fa-regular fa-circle-play"></i>
+                  </button>
+                  <button class="stop-btn">
+                    <i class="fa-regular fa-circle-stop"></i>
+                  </button>
+                </div>
+                <div class="ip-addr">
+                  <span>linfed.ru:28013</span>
+                  <button class="copy-btn" data-ip="linfed.ru:28013">
+                    <i class="far fa-copy"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
