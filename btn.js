@@ -1,14 +1,12 @@
 // Variables
-const pracOne = `<i class="fas fa-crosshairs"></i>  Practice 1`;
-
-// Use Variables
-document.addEventListener("DOMContentLoaded", ready);
-function ready() {
-  document.getElementById("heading").innerHTML = pracOne
-}
+const servers = [
+  { id: 1, name: `<i class="fas fa-crosshairs"></i> Practice 1` },
+  { id: 2, name: `<i class="fas fa-crosshairs"></i> Practice 2` },
+  { id: 3, name: `<i class="fas fa-crosshairs"></i> Practice 3` },
+];
 
 // Notification
-//Notification Copy
+// Notification Copy
 document.addEventListener("DOMContentLoaded", function () {
   // Функция для копирования IP-адреса
   function copyIP(ip) {
@@ -78,27 +76,40 @@ function notificationFail() {
 }
 
 // Button Handler
-// Stop Button Handler
-document.addEventListener("DOMContentLoaded", function () {
-  const stopButton = document.querySelectorAll(".stop-btn");
-  stopButton.forEach(function (button) {
-    button.addEventListener("click", stopServer);
-  });
-});
-
 // Start Button Handler
 document.addEventListener("DOMContentLoaded", function () {
   const stopButton = document.querySelectorAll(".start-btn");
   stopButton.forEach(function (button) {
-    button.addEventListener("click", startServer);
+    button.addEventListener("click", function () {
+      const id = this.getAttribute("data-id")
+      startServer(id)
+    });
+  });
+});
+
+// Stop Button Handler
+document.addEventListener("DOMContentLoaded", function () {
+  const stopButton = document.querySelectorAll(".stop-btn");
+  stopButton.forEach(function (button) {
+    button.addEventListener("click", function () {
+      const id = this.getAttribute("data-id");
+      stopServer(id);
+    });
   });
 });
 
 // Fetch
-function stopServer() {
-  fetch("http://localhost:5000/server-stop", { method: "POST" })
+function stopServer(id) {
+  fetch("http://localhost:5000/server-stop", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // Указываем тип контента
+    },
+    body: JSON.stringify({ id: id }),
+  })
     .then(function (response) {
       if (!response.ok) {
+        console.log(response)
         throw new Error("HTTP ERROR" + response.status);
       }
       return response.json();
@@ -111,8 +122,14 @@ function stopServer() {
     });
 }
 
-function startServer() {
-  fetch("http://localhost:5000/server-start", { method: "POST" })
+function startServer(id) {
+  fetch("http://localhost:5000/server-start", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // Указываем тип контента
+    },
+    body: JSON.stringify({ id: id }),
+  })
     .then(function (response) {
       if (!response.ok) {
         throw new Error("HTTP ERROR" + response.status);
