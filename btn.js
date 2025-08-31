@@ -1,9 +1,5 @@
 // Variables
-const servers = [
-  { id: 1, name: `<i class="fas fa-crosshairs"></i> Practice 1` },
-  { id: 2, name: `<i class="fas fa-crosshairs"></i> Practice 2` },
-  { id: 3, name: `<i class="fas fa-crosshairs"></i> Practice 3` },
-];
+
 
 // Notification
 // Notification Copy
