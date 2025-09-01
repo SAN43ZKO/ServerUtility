@@ -244,16 +244,6 @@ body {
   margin-right: 8px;
 }
 
-.far.fa-copy {
-  font-size: large;
-  color: rgb(198, 197, 197);
-  transition: color 0.5s;
-}
-
-.far.fa-copy:hover {
-  color: var(--input-bg);
-}
-
 .btn {
   display: block;
   width: 100%;
@@ -314,6 +304,24 @@ body {
 
 .fa-regular.fa-circle-stop:hover {
   color: red;
+}
+
+.far.fa-copy {
+  font-size: large;
+  color: rgb(198, 197, 197);
+  transition: color 0.5s;
+}
+
+.far.fa-copy:hover {
+  color: var(--input-bg);
+}
+
+.fa-solid.fa-circle.red {
+  color: red;
+}
+
+.fa-solid.fa-circle.green {
+  color: lime;
 }
 
 .connect-btn:hover {

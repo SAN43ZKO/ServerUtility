@@ -1,7 +1,8 @@
 async function getData() {
   const endpoints = [
-    { id: "4185", properties: ["mapname", "port", "status"] },
-    { id: "4188", properties: ["mapname", "port", "status"] },
+    { id: "4185", properties: ["map", "status", "players"] },
+    { id: "4187", properties: ["map", "status", "players"] },
+    { id: "4186", properties: ["map", "status", "players"] },
   ];
 
   // Обрабатываем все endpoints параллельно
@@ -9,7 +10,7 @@ async function getData() {
     endpoints.map(async (endpoint) => {
       try {
         const response = await fetch(
-          `https://proxy.corsfix.com/?https://cs-servers.ru/web/json-${endpoint.id}.json`
+          `http://localhost:5000/status`
         );
 
         if (!response.ok) {
@@ -37,7 +38,8 @@ async function getData() {
       }
     })
   );
-  displayData(results)
+  console.log(results)
+  displayData(results);
 }
 
 function displayData(results) {
@@ -47,5 +49,40 @@ function displayData(results) {
       data: result.value.data,
     };
   });
+  data.forEach((item) => {
+    const block = document.getElementById(`server-${item.id}`);
 
+    try {
+      if (block) {
+        const status = item.data.status[0]
+        block.querySelector(".player").textContent = item.data.players;
+        block.querySelector(".map").textContent = item.data.map;
+        switch (status) {
+          case "offline":
+            block.querySelector(".status").innerHTML = `<i class="fa-solid fa-circle red"></i>`
+            block.querySelector(".status").classList.add("red")
+            break
+          case "online":
+            block.querySelector(".status").innerHTML = `<i class="fa-solid fa-circle green"></i>`
+            block.querySelector(".status").classList.add("green")
+            break
+        }
+      }
+    } catch {
+      const errText = "Couldn't get data";
+      if (block) {
+        block.querySelector(".player").textContent = errText
+        block.querySelector(".map").textContent = errText
+        block.querySelector(".status").textContent = errText
+      }
+    }
+  });
 }
+
+getData()
+setInterval(() => {
+  getData()
+}, 15000);
+
+
+// https://proxy.corsfix.com/?https://cs-servers.ru/web/json-${endpoint.id}.json
