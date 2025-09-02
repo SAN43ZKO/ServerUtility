@@ -1,17 +1,41 @@
 async function getData() {
   const endpoints = [
-    { id: "4185", properties: ["map", "status", "players"] },
-    { id: "4187", properties: ["map", "status", "players"] },
-    { id: "4186", properties: ["map", "status", "players"] },
+    {
+      id: "1",
+      serverIp: "linfed.ru",
+      serverPort: 28011,
+      properties: ["map", "status", "players"],
+    },
+    {
+      id: "2",
+      serverIp: "linfed.ru",
+      serverPort: 28012,
+      properties: ["map", "status", "players"],
+    },
+    {
+      id: "3",
+      serverIp: "linfed.ru",
+      serverPort: 28013,
+      properties: ["map", "status", "players"],
+    },
   ];
 
   // Обрабатываем все endpoints параллельно
   const results = await Promise.allSettled(
     endpoints.map(async (endpoint) => {
       try {
-        const response = await fetch(
-          `http://localhost:5000/status`
-        );
+        const response = await fetch(`http://localhost:5000/status`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Указываем тип контента
+          },
+          body: JSON.stringify({
+            serverIp: endpoint.serverIp,
+            serverPort: endpoint.serverPort
+          }),
+        });
+
+        console.log(endpoint.serverIp, endpoint.serverPort);
 
         if (!response.ok) {
           throw new Error(`HTTP Error: ${response.status}`);
@@ -38,7 +62,7 @@ async function getData() {
       }
     })
   );
-  console.log(results)
+  console.log(results);
   displayData(results);
 }
 
@@ -54,35 +78,38 @@ function displayData(results) {
 
     try {
       if (block) {
-        const status = item.data.status[0]
+        const status = item.data.status[0];
         block.querySelector(".player").textContent = item.data.players;
         block.querySelector(".map").textContent = item.data.map;
         switch (status) {
           case "offline":
-            block.querySelector(".status").innerHTML = `<i class="fa-solid fa-circle red"></i>`
-            block.querySelector(".status").classList.add("red")
-            break
+            block.querySelector(
+              ".status"
+            ).innerHTML = `<i class="fa-solid fa-circle red"></i>`;
+            block.querySelector(".status").classList.add("red");
+            break;
           case "online":
-            block.querySelector(".status").innerHTML = `<i class="fa-solid fa-circle green"></i>`
-            block.querySelector(".status").classList.add("green")
-            break
+            block.querySelector(
+              ".status"
+            ).innerHTML = `<i class="fa-solid fa-circle green"></i>`;
+            block.querySelector(".status").classList.add("green");
+            break;
         }
       }
     } catch {
       const errText = "Couldn't get data";
       if (block) {
-        block.querySelector(".player").textContent = errText
-        block.querySelector(".map").textContent = errText
-        block.querySelector(".status").textContent = errText
+        block.querySelector(".player").textContent = errText;
+        block.querySelector(".map").textContent = errText;
+        block.querySelector(".status").textContent = errText;
       }
     }
   });
 }
 
-getData()
-setInterval(() => {
-  getData()
-}, 15000);
-
+// getData()
+// setInterval(() => {
+//   getData()
+// }, 15000);
 
 // https://proxy.corsfix.com/?https://cs-servers.ru/web/json-${endpoint.id}.json
