@@ -34,7 +34,7 @@ body {
 .notification {
   position: fixed;
   top: 20px;
-  right: 0px;
+  right: -1px;
   padding: 15px 25px;
   background-color: #4caf50;
   color: white;
@@ -62,7 +62,7 @@ body {
 .notification-fail {
   position: fixed;
   top: 20px;
-  right: 0px;
+  right: -1px;
   padding: 15px 25px;
   background-color: red;
   color: white;
@@ -90,7 +90,7 @@ body {
 .preNotification {
   position: fixed;
   top: 20px;
-  right: 0px;
+  right: -1px;
   padding: 15px 25px;
   background-color: rgb(204, 204, 0);
   color: white;
@@ -119,7 +119,7 @@ body {
 .notification-stop {
   position: fixed;
   top: 20px;
-  right: 0px;
+  right: -1px;
   padding: 15px 25px;
   background-color: red;
   color: white;
