@@ -1,6 +1,5 @@
 // Variables
-
-
+import { reset } from "./api.js";
 // Notification
 // Notification Copy
 document.addEventListener("DOMContentLoaded", function () {
@@ -35,19 +34,21 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Notification Start
-function notificationStart() {
+function notificationPreStart() {
   const preNotification = document.getElementById("notification-preStart");
   preNotification.classList.add("preShow");
 
   setTimeout(() => {
     preNotification.classList.remove("preShow");
-    setTimeout(() => {
-      const notificationStart = document.getElementById("notification-start");
-      notificationStart.classList.add("show");
-      setTimeout(() => {
-        notificationStart.classList.remove("show");
-      }, 3000);
-    }, 5000);
+  }, 3000);
+}
+
+function notificationStart() {
+  const notificationStart = document.getElementById("notification-start");
+  notificationStart.classList.add("show");
+
+  setTimeout(() => {
+    notificationStart.classList.remove("show");
   }, 3000);
 }
 
@@ -77,8 +78,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const stopButton = document.querySelectorAll(".start-btn");
   stopButton.forEach(function (button) {
     button.addEventListener("click", function () {
-      const id = this.getAttribute("data-id")
-      startServer(id)
+      const id = this.getAttribute("data-id");
+      const block = document.getElementById(`server-${id}`);
+      const mapLoader = block.querySelector(".map");
+      const playerLoader = block.querySelector(".player");
+      const statusLoader = block.querySelector(".status");
+      [mapLoader, playerLoader, statusLoader].forEach(
+        (el) => (el.innerHTML = " ")
+      );
+      [mapLoader, playerLoader, statusLoader].forEach((el) =>
+        el?.classList?.add("loader")
+      );
+      startServer(id);
     });
   });
 });
@@ -89,6 +100,16 @@ document.addEventListener("DOMContentLoaded", function () {
   stopButton.forEach(function (button) {
     button.addEventListener("click", function () {
       const id = this.getAttribute("data-id");
+      const block = document.getElementById(`server-${id}`);
+      const mapLoader = block.querySelector(".map");
+      const playerLoader = block.querySelector(".player");
+      const statusLoader = block.querySelector(".status");
+      [mapLoader, playerLoader, statusLoader].forEach(
+        (el) => (el.innerHTML = " ")
+      );
+      [mapLoader, playerLoader, statusLoader].forEach((el) =>
+        el?.classList?.add("loader")
+      );
       stopServer(id);
     });
   });
@@ -105,13 +126,16 @@ function stopServer(id) {
   })
     .then(function (response) {
       if (!response.ok) {
-        console.log(response)
+        console.log(response);
         throw new Error("HTTP ERROR" + response.status);
       }
       return response.json();
     })
     .then(function () {
-      notificationStop();
+      setTimeout(() => {
+        notificationStop()
+      }, 18000);
+      reset()
     })
     .catch(function () {
       notificationFail();
@@ -133,9 +157,15 @@ function startServer(id) {
       return response.json();
     })
     .then(function () {
-      notificationStart();
+      notificationPreStart();
+      setTimeout(() => {
+        notificationStart()
+      }, 18000);
+      reset()
     })
     .catch(function () {
       notificationFail();
     });
 }
+
+export { notificationStart };

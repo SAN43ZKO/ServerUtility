@@ -1,3 +1,5 @@
+import { notificationStart } from "./btn.js";
+
 async function getData() {
   const endpoints = [
     {
@@ -31,11 +33,9 @@ async function getData() {
           },
           body: JSON.stringify({
             serverIp: endpoint.serverIp,
-            serverPort: endpoint.serverPort
+            serverPort: endpoint.serverPort,
           }),
         });
-
-        console.log(endpoint.serverIp, endpoint.serverPort);
 
         if (!response.ok) {
           throw new Error(`HTTP Error: ${response.status}`);
@@ -62,8 +62,7 @@ async function getData() {
       }
     })
   );
-  console.log(results);
-  displayData(results);
+  displayData(results)
 }
 
 function displayData(results) {
@@ -73,14 +72,26 @@ function displayData(results) {
       data: result.value.data,
     };
   });
+
   data.forEach((item) => {
     const block = document.getElementById(`server-${item.id}`);
 
     try {
       if (block) {
         const status = item.data.status[0];
-        block.querySelector(".player").textContent = item.data.players;
-        block.querySelector(".map").textContent = item.data.map;
+        const playerText = item.data.players;
+        const mapText = item.data.map;
+
+        const mapLoader = block.querySelector(".map");
+        const playerLoader = block.querySelector(".player");
+        const statusLoader = block.querySelector(".status");
+        [mapLoader, playerLoader, statusLoader].forEach((el) =>
+          el?.classList?.remove("loader")
+        );
+
+        block.querySelector(".player").textContent = playerText;
+        block.querySelector(".map").textContent = mapText;
+
         switch (status) {
           case "offline":
             block.querySelector(
@@ -95,9 +106,15 @@ function displayData(results) {
             block.querySelector(".status").classList.add("green");
             break;
         }
+
+        if (item.data.map == "") {
+          block.querySelector(".map").textContent = "Server offline";
+          block.querySelector(".player").textContent = "Server offline";
+        }
       }
     } catch {
       const errText = "Couldn't get data";
+
       if (block) {
         block.querySelector(".player").textContent = errText;
         block.querySelector(".map").textContent = errText;
@@ -105,11 +122,15 @@ function displayData(results) {
       }
     }
   });
+  console.log("dsa")
 }
 
-// getData()
-// setInterval(() => {
-//   getData()
-// }, 15000);
+getData();
+let intervalId = setInterval(getData, 15000)
 
-// https://proxy.corsfix.com/?https://cs-servers.ru/web/json-${endpoint.id}.json
+function reset() {
+  clearInterval(intervalId)
+  intervalId = setInterval(getData, 15000)
+}
+
+export { reset };
