@@ -1,15 +1,17 @@
+import { notificationStart } from "./src/btn.js";
+
 async function getData() {
   const endpoints = [
     {
       id: "1",
-      serverIp: "linfed.ru",
-      serverPort: 28011,
+      serverIp: "85.119.149.233",
+      serverPort: 27015,
       properties: ["map", "status", "players"],
     },
     {
       id: "2",
-      serverIp: "linfed.ru",
-      serverPort: 28012,
+      serverIp: "95.213.255.138",
+      serverPort: 27015,
       properties: ["map", "status", "players"],
     },
     {
@@ -24,7 +26,7 @@ async function getData() {
   const results = await Promise.allSettled(
     endpoints.map(async (endpoint) => {
       try {
-        const response = await fetch(`http://localhost:5000/status`, {
+        const response = await fetch(`https://dev.linfed.ru/api/status`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json", // Указываем тип контента
@@ -34,8 +36,6 @@ async function getData() {
             serverPort: endpoint.serverPort
           }),
         });
-
-        console.log(endpoint.serverIp, endpoint.serverPort);
 
         if (!response.ok) {
           throw new Error(`HTTP Error: ${response.status}`);
@@ -49,6 +49,7 @@ async function getData() {
           result[property] = data[property] ? data[property].split(" ") : [];
         });
 
+        console.log("success")
         return {
           id: endpoint.id,
           data: result,
@@ -62,7 +63,6 @@ async function getData() {
       }
     })
   );
-  console.log(results);
   displayData(results);
 }
 
@@ -95,6 +95,10 @@ function displayData(results) {
             block.querySelector(".status").classList.add("green");
             break;
         }
+        if (item.data.map == "") {
+          block.querySelector(".map").textContent = "Server offline"
+          block.querySelector(".player").textContent = "Server offline"
+        }
       }
     } catch {
       const errText = "Couldn't get data";
@@ -107,9 +111,8 @@ function displayData(results) {
   });
 }
 
-// getData()
-// setInterval(() => {
-//   getData()
-// }, 15000);
+getData()
+setInterval(() => {
+  getData()
+}, 15000);
 
-// https://proxy.corsfix.com/?https://cs-servers.ru/web/json-${endpoint.id}.json

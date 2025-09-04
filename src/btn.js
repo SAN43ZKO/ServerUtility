@@ -35,19 +35,21 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Notification Start
-function notificationStart() {
+function notificationPreStart() {
   const preNotification = document.getElementById("notification-preStart");
   preNotification.classList.add("preShow");
 
   setTimeout(() => {
     preNotification.classList.remove("preShow");
-    setTimeout(() => {
-      const notificationStart = document.getElementById("notification-start");
-      notificationStart.classList.add("show");
-      setTimeout(() => {
-        notificationStart.classList.remove("show");
-      }, 3000);
-    }, 5000);
+  }, 3000);
+}
+
+function notificationStart() {
+  const notificationStart = document.getElementById("notification-start")
+  notificationStart.classList.add("show")
+
+  setTimeout(() => {
+    notificationStart.classList.remove("show")
   }, 3000);
 }
 
@@ -96,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Fetch
 function stopServer(id) {
-  fetch("http://localhost:5000/server-stop", {
+  fetch("https://dev.linfed.ru/api/server-stop", {
     method: "POST",
     headers: {
       "Content-Type": "application/json", // Указываем тип контента
@@ -105,7 +107,6 @@ function stopServer(id) {
   })
     .then(function (response) {
       if (!response.ok) {
-        console.log(response)
         throw new Error("HTTP ERROR" + response.status);
       }
       return response.json();
@@ -114,12 +115,12 @@ function stopServer(id) {
       notificationStop();
     })
     .catch(function () {
-      notificationFail();
+      // notificationFail();
     });
 }
 
 function startServer(id) {
-  fetch("http://localhost:5000/server-start", {
+  fetch("https://dev.linfed.ru/api/server-start", {
     method: "POST",
     headers: {
       "Content-Type": "application/json", // Указываем тип контента
@@ -133,9 +134,15 @@ function startServer(id) {
       return response.json();
     })
     .then(function () {
-      notificationStart();
+      notificationPreStart();
+      const data = response.json()
+      if (data.output !== "") {
+        notificationStart()
+      }
     })
     .catch(function () {
       notificationFail();
     });
 }
+
+export {notificationStart}
