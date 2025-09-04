@@ -33,7 +33,7 @@ async function getData() {
           },
           body: JSON.stringify({
             serverIp: endpoint.serverIp,
-            serverPort: endpoint.serverPort
+            serverPort: endpoint.serverPort,
           }),
         });
 
@@ -73,14 +73,26 @@ function displayData(results) {
       data: result.value.data,
     };
   });
+
   data.forEach((item) => {
     const block = document.getElementById(`server-${item.id}`);
 
     try {
       if (block) {
         const status = item.data.status[0];
-        block.querySelector(".player").textContent = item.data.players;
-        block.querySelector(".map").textContent = item.data.map;
+        const playerText = item.data.players;
+        const mapText = item.data.map;
+
+        const mapLoader = block.querySelector(".map");
+        const playerLoader = block.querySelector(".player");
+        const statusLoader = block.querySelector(".status");
+        [mapLoader, playerLoader, statusLoader].forEach((el) =>
+          el?.classList?.remove("loader")
+        );
+
+        block.querySelector(".player").textContent = playerText;
+        block.querySelector(".map").textContent = mapText;
+
         switch (status) {
           case "offline":
             block.querySelector(
@@ -102,6 +114,7 @@ function displayData(results) {
       }
     } catch {
       const errText = "Couldn't get data";
+
       if (block) {
         block.querySelector(".player").textContent = errText;
         block.querySelector(".map").textContent = errText;
@@ -109,6 +122,7 @@ function displayData(results) {
       }
     }
   });
+  console.log("dsa")
 }
 
 getData()
