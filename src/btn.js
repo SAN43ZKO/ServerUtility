@@ -1,5 +1,5 @@
 // Variables
-import { reset } from "./api.js";
+import { reset } from "./src/api.js";
 // Notification
 // Notification Copy
 document.addEventListener("DOMContentLoaded", function () {
