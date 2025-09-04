@@ -1,5 +1,5 @@
 // Variables
-import { reset } from "./src/api.js";
+import { reset } from "./getApi.js";
 // Notification
 // Notification Copy
 document.addEventListener("DOMContentLoaded", function () {
@@ -44,11 +44,11 @@ function notificationPreStart() {
 }
 
 function notificationStart() {
-  const notificationStart = document.getElementById("notification-start")
-  notificationStart.classList.add("show")
+  const notificationStart = document.getElementById("notification-start");
+  notificationStart.classList.add("show");
 
   setTimeout(() => {
-    notificationStart.classList.remove("show")
+    notificationStart.classList.remove("show");
   }, 3000);
 }
 
@@ -132,9 +132,9 @@ function stopServer(id) {
     })
     .then(function () {
       setTimeout(() => {
-        notificationStop()
+        notificationStop();
       }, 18000);
-      reset()
+      reset();
     })
     .catch(function () {
       // notificationFail();
@@ -157,14 +157,12 @@ function startServer(id) {
     })
     .then(function () {
       notificationPreStart();
-      const data = response.json()
-      if (data.output !== "") {
-        notificationStart()
-      }
+      setTimeout(() => {
+        notificationStart();
+      }, 18000);
+      reset();
     })
     .catch(function () {
       notificationFail();
     });
 }
-
-export {notificationStart}

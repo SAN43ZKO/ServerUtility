@@ -1,17 +1,15 @@
-import { notificationStart } from "./src/btn.js";
-
 async function getData() {
   const endpoints = [
     {
       id: "1",
-      serverIp: "85.119.149.233",
-      serverPort: 27015,
+      serverIp: "linfed.ru",
+      serverPort: 28011,
       properties: ["map", "status", "players"],
     },
     {
       id: "2",
-      serverIp: "95.213.255.138",
-      serverPort: 27015,
+      serverIp: "linfed.ru",
+      serverPort: 28012,
       properties: ["map", "status", "players"],
     },
     {
@@ -49,7 +47,7 @@ async function getData() {
           result[property] = data[property] ? data[property].split(" ") : [];
         });
 
-        console.log("success")
+        console.log("success");
         return {
           id: endpoint.id,
           data: result,
@@ -108,8 +106,8 @@ function displayData(results) {
             break;
         }
         if (item.data.map == "") {
-          block.querySelector(".map").textContent = "Server offline"
-          block.querySelector(".player").textContent = "Server offline"
+          block.querySelector(".map").textContent = "Server offline";
+          block.querySelector(".player").textContent = "Server offline";
         }
       }
     } catch {
@@ -122,11 +120,15 @@ function displayData(results) {
       }
     }
   });
-  console.log("dsa")
+  console.log("dsa");
 }
 
-getData()
-setInterval(() => {
-  getData()
-}, 15000);
+getData();
+let intervalId = setInterval(getData, 15000);
 
+function reset() {
+  clearInterval(intervalId);
+  intervalId = setInterval(getData, 15000);
+}
+
+export { reset };
