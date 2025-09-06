@@ -114,6 +114,12 @@ function displayData(results) {
       const errText = "Couldn't get data";
 
       if (block) {
+        const mapLoader = block.querySelector(".map");
+        const playerLoader = block.querySelector(".player");
+        const statusLoader = block.querySelector(".status");
+        [mapLoader, playerLoader, statusLoader].forEach((el) =>
+          el?.classList?.remove("loader")
+        );
         block.querySelector(".player").textContent = errText;
         block.querySelector(".map").textContent = errText;
         block.querySelector(".status").textContent = errText;
