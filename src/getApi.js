@@ -1,22 +1,27 @@
+//Строка: 135
+//  Сделать отдельно для .player
+//Строка: 115
+//  Доделать проверку версии сервера
+
 async function getData() {
   const endpoints = [
     {
       id: "1",
       serverIp: "linfed.ru",
       serverPort: 28011,
-      properties: ["map", "status", "players"],
+      properties: ["map", "status", "players", "server_version"],
     },
     {
       id: "2",
       serverIp: "linfed.ru",
       serverPort: 28012,
-      properties: ["map", "status", "players"],
+      properties: ["map", "status", "players", "server_version"],
     },
     {
       id: "3",
       serverIp: "linfed.ru",
       serverPort: 28013,
-      properties: ["map", "status", "players"],
+      properties: ["map", "status", "players", "server_version"],
     },
   ];
 
@@ -24,30 +29,43 @@ async function getData() {
   const results = await Promise.allSettled(
     endpoints.map(async (endpoint) => {
       try {
-        const response = await fetch(`https://dev.linfed.ru/api/status`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json", // Указываем тип контента
-          },
-          body: JSON.stringify({
-            serverIp: endpoint.serverIp,
-            serverPort: endpoint.serverPort,
+        const [statusResponse, versionResponse] = await Promise.all([
+          fetch(`http://localhost:5000/api/status`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json", // Указываем тип контента
+            },
+            body: JSON.stringify({
+              serverIp: endpoint.serverIp,
+              serverPort: endpoint.serverPort,
+            }),
           }),
-        });
+          fetch("http://localhost:5000/api/version", { mathod: "GET" }),
+        ]);
 
-        if (!response.ok) {
-          throw new Error(`HTTP Error: ${response.status}`);
+        if (!statusResponse.ok) {
+          throw new Error(`HTTP Error: ${statusResponse.status}`);
+        }
+        if (!versionResponse.ok) {
+          throw new Error(`HTTP Error: ${versionResponse.status}`);
         }
 
-        const data = await response.json();
+        const [statusData, versionData] = await Promise.all([
+          statusResponse.json(),
+          versionResponse.json(),
+        ]);
+
         const result = {};
 
         // Обрабатываем каждое свойство
         endpoint.properties.forEach((property) => {
-          result[property] = data[property] ? data[property].split(" ") : [];
+          result[property] = statusData[property]
+            ? statusData[property].split(" ")
+            : [];
         });
 
-        console.log("success");
+        result.app_version = [versionData];
+
         return {
           id: endpoint.id,
           data: result,
@@ -61,6 +79,7 @@ async function getData() {
       }
     })
   );
+  console.log(results)
   displayData(results);
 }
 
@@ -78,18 +97,27 @@ function displayData(results) {
     try {
       if (block) {
         const status = item.data.status[0];
+        const appVersion = item.data.app_version;
         const playerText = item.data.players;
         const mapText = item.data.map;
+        const versionText = item.data.server_version;
 
         const mapLoader = block.querySelector(".map");
         const playerLoader = block.querySelector(".player");
         const statusLoader = block.querySelector(".status");
-        [mapLoader, playerLoader, statusLoader].forEach((el) =>
+        const versionLoader = block.querySelector(".version");
+        [mapLoader, playerLoader, statusLoader, versionLoader].forEach((el) =>
           el?.classList?.remove("loader")
         );
 
         block.querySelector(".player").textContent = playerText;
         block.querySelector(".map").textContent = mapText;
+
+        if (versionText[0] === appVersion[0] || versionText == "") {
+          block.querySelector(".version").textContent = "CURRENT";
+        } else {
+          block.querySelector(".version").textContent = "OUTDATED";
+        }
 
         switch (status) {
           case "offline":
@@ -117,16 +145,17 @@ function displayData(results) {
         const mapLoader = block.querySelector(".map");
         const playerLoader = block.querySelector(".player");
         const statusLoader = block.querySelector(".status");
-        [mapLoader, playerLoader, statusLoader].forEach((el) =>
+        const versionLoader = block.querySelector(".version");
+        [mapLoader, playerLoader, statusLoader, versionLoader].forEach((el) =>
           el?.classList?.remove("loader")
         );
         block.querySelector(".player").textContent = errText;
         block.querySelector(".map").textContent = errText;
         block.querySelector(".status").textContent = errText;
+        block.querySelector(".version").textContent = errText;
       }
     }
   });
-  console.log("dsa");
 }
 
 getData();
