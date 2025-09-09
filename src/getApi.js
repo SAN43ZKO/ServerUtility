@@ -1,8 +1,3 @@
-//Строка: 135
-//  Сделать отдельно для .player
-//Строка: 115
-//  Доделать проверку версии сервера
-
 async function getData() {
   const endpoints = [
     {
@@ -79,7 +74,6 @@ async function getData() {
       }
     })
   );
-  console.log(results)
   displayData(results);
 }
 
